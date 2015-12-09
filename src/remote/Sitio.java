@@ -9,6 +9,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Map;
 import modelo.dto.DataTable;
+import remote.util.InterfaceManager.Interfaces;
 
 /**
  *
@@ -162,4 +163,8 @@ public interface Sitio extends Remote {
      */
     public short updateEmpleadosByImplementacion(int idImplementacion, int[] idsEmpleado)
             throws RemoteException;
+    
+    public void setConexionesSitos(Map<Interfaces, Object[]> conexiones)
+            throws RemoteException;
+    
 }

@@ -39,6 +39,11 @@ import remote.Sitio;
 public class InterfaceManager {
 
     /**
+     * False si se conecta normal o true si no
+     */
+    public static boolean conexionRemota = false;
+    
+    /**
      * Los posibles valores de los sitios. Del 1 - 7 y localhost
      */
     public static enum Interfaces {
@@ -55,6 +60,10 @@ public class InterfaceManager {
      */
     private static final Map<String, Sitio> SITIOS = new HashMap<>();
     
+    /**
+     * Mapa con las ips de los sitios, puertos y nombres de interfaces...
+     */
+    private static Map<Interfaces, Object[]> CONEXIONES_SITIO = new HashMap<>();
     
     public static void addInterface(String ip, int puerto, String servicio)
             throws RemoteException, NotBoundException {
@@ -99,6 +108,14 @@ public class InterfaceManager {
         return SERVICIOS_SITIO.get(interfaceSitio);
     }
     
+    public static void setConexionSitio(Interfaces interfaceSitio, Object ... datos) {
+        CONEXIONES_SITIO.put(interfaceSitio, datos);
+    }
+    
+    public static Object[] getConexionSitio(Interfaces interfaceSitio) {
+        return CONEXIONES_SITIO.get(interfaceSitio);
+    }
+    
     public static List<Interfaces> getInterfacesRegistradas() {
         List<Interfaces> interfacesRegistradas = new ArrayList<>();
                 
@@ -113,5 +130,13 @@ public class InterfaceManager {
         System.out.println("Interfaces registradas: " + interfacesRegistradas);
         
         return interfacesRegistradas;
+    }
+    
+    public static Map<Interfaces, Object[]> getInterfacesConexion() {
+        return new HashMap(CONEXIONES_SITIO);
+    }
+    
+    public static void setIntefacesConexion(Map<Interfaces, Object[]> conexiones) {
+        CONEXIONES_SITIO = conexiones;
     }
 }

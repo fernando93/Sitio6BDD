@@ -292,15 +292,11 @@ public class TransactionManager {
             "zona_id"};
         
         DataTable fragDatosSitio1 = QueryManager.uniGet(Interfaces.SITIO_1, "plantel", columnas, null, null);
-        DataTable fragDatosSitio2 = QueryManager.uniGet(Interfaces.SITIO_2, "plantel", columnas, null, null);
         DataTable fragDatosSitio3 = QueryManager.uniGet(Interfaces.SITIO_3, "plantel", columnas, null, null);
-        DataTable fragDatosSitio4 = QueryManager.uniGet(Interfaces.SITIO_4, "plantel", columnas, null, null);
         DataTable fragDatosSitioLocal = QueryManager.uniGet(Interfaces.LOCALHOST,"plantel", columnas, null, null);
-        DataTable fragDatosSitio7 = QueryManager.uniGet(Interfaces.SITIO_7,"plantel", columnas, null, null);
         
-        return DataTable.combinarFragH(fragDatosSitio1, fragDatosSitio2, fragDatosSitio3,
-                fragDatosSitio4, fragDatosSitioLocal,
-                fragDatosSitio7);
+        return DataTable.combinarFragH(fragDatosSitio1, fragDatosSitio3,
+                fragDatosSitioLocal);
     }
 
     public static void commit() throws InterruptedException {

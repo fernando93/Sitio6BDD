@@ -13,6 +13,7 @@ import modelo.util.ConnectionManager;
 import modelo.dao.EmpleadoDAO;
 import modelo.dto.DataTable;
 import remote.Sitio6Int;
+import remote.util.InterfaceManager;
 
 /**
  *
@@ -96,5 +97,16 @@ public class AccesoLocal extends UnicastRemoteObject implements Sitio6Int {
     @Override
     public DataTable get(String tabla, String[] columnas, String[] aliases, Map<String, ?> attrWhere) throws RemoteException {
         return new BaseDAO().get(tabla, columnas, aliases, attrWhere);
+    }
+    
+    @Override
+    public void setConexionesSitos(Map<InterfaceManager.Interfaces, Object[]> conexiones)
+            throws RemoteException {
+        
+        InterfaceManager.setIntefacesConexion(conexiones);
+        InterfaceManager.conexionRemota = true;
+        
+        System.out.println("Se obtuvieron " + InterfaceManager
+                .getInterfacesConexion().size() + " interfaces");
     }
 }
