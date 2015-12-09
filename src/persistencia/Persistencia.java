@@ -20,7 +20,6 @@ public interface Persistencia extends Remote {
      * Inserta secuencialmente todos los datos de un DataTable en su tabla
      * correspondiente segun el nombre de la tabla
      * 
-     * @param tabla
      * @param tablas los nombres de las tablas a las que se desean insertar
      * datos, éstas tablas deben estar en el orden de inserción necesario para
      * que todas las tablas se puedan insertar sin que haya problemas de
@@ -103,4 +102,20 @@ public interface Persistencia extends Remote {
     public DataTable get(String tabla, String[] columnas, String[] aliases,
             Map<String, ?> attrWhere)
             throws RemoteException;
+    
+    public DataTable getEmpleadosByPlantel(int idPlantel)
+            throws RemoteException;
+    
+    public DataTable getImplementacionesByEmpleado(String numeroEmpleado)
+            throws RemoteException;
+    
+    public DataTable getEmpleadosByDepartamento(int idDepartamento)
+            throws RemoteException;
+    
+    public DataTable getEmpleadosByDireccion(int idDireccion)
+            throws RemoteException;
+    
+    public DataTable getEmpleadosByPuesto(int idPuesto)
+            throws RemoteException;
+    
 }

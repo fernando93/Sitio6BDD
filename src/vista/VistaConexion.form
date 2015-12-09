@@ -494,6 +494,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="s1IP">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="25.108.114.166"/>
+      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="txtIPs[0] = s1IP;"/>
       </AuxValues>
@@ -547,6 +550,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="s2IP">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="25.98.14.145"/>
+      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="txtIPs[1] = s2IP;"/>
       </AuxValues>
@@ -584,6 +590,12 @@
       </AuxValues>
     </Component>
     <Component class="javax.swing.JTextField" name="s3IP">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="25.22.91.234"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="s3IPActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="txtIPs[2] = s3IP;"/>
       </AuxValues>
@@ -637,6 +649,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="s4IP">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="25.22.91.234"/>
+      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="txtIPs[3] = s4IP;"/>
       </AuxValues>
@@ -690,6 +705,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="s5IP">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="25.108.159.44"/>
+      </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="txtIPs[4] = s5IP;"/>
       </AuxValues>
@@ -704,8 +722,11 @@
     </Component>
     <Component class="javax.swing.JTextField" name="s5Puerto">
       <Properties>
-        <Property name="text" type="java.lang.String" value="11973"/>
+        <Property name="text" type="java.lang.String" value="11972"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="s5PuertoActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="txtPuertos[4] = s5Puerto;"/>
       </AuxValues>
@@ -744,7 +765,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="s6IP">
       <Properties>
-        <Property name="text" type="java.lang.String" value="192.168.173.155"/>
+        <Property name="text" type="java.lang.String" value="25.108.159.44"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="txtIPs[5] = s6IP;"/>
@@ -799,6 +820,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="s7IP">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="25.97.168.201"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel30">
       <Properties>

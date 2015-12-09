@@ -333,7 +333,7 @@ public class QueryManager {
         try {
             if (interfaceSitio == Interfaces.LOCALHOST) {
                 ok = new BaseDAO().get(tableName, projectColumns, projectAliases, attrWhere);
-                System.out.println("Insert en el sitio: "
+                System.out.println("Get en el sitio: "
                         + interfaceSitio + ", resultado = " + ok);
             } else {
                 Sitio sitio = InterfaceManager.getInterface(
@@ -344,7 +344,7 @@ public class QueryManager {
 
                     ok = sitio.get(tableName, projectColumns, projectAliases, attrWhere);
 
-                    System.out.println("Insert en el sitio: "
+                    System.out.println("Get en el sitio: "
                             + interfaceSitio + ", resultado = " + ok);
                 }
             }
@@ -356,37 +356,26 @@ public class QueryManager {
         return ok;
     }
 
-//    public static void main(String[] args) {
-//        try {
-//            InterfaceManager.addInterface("192.168.173.159", 11973, "Sitio1Capacisoft");
-//            InterfaceManager.addInterface("192.168.173.1", 11974, "Sitio4Capacisoft");
-//            InterfaceManager.addInterface("192.168.173.199", 11973, "Sitio7Capacisoft");
-//            InterfaceManager.setInterfaceServicio(
-//                            Interfaces.SITIO_1, "Sitio1Capacisoft");
-//            InterfaceManager.setInterfaceServicio(
-//                            Interfaces.SITIO_4, "Sitio4Capacisoft");
-//            InterfaceManager.setInterfaceServicio(
-//                            Interfaces.SITIO_7, "Sitio7Capacisoft");
-//
-//            String tabla = "empleado";
-//            String[] columnas = {
-//            "numero",
-//            "primer_nombre",
-//            "segundo_nombre",
-//            "apellido_paterno",
-//            "apellido_materno",};
-//            
-//            DataTable fragDatosSitio1 = QueryManager.uniGet(Interfaces.SITIO_1, tabla, columnas, null, null);
-//            DataTable fragDatosSitio4 = QueryManager.uniGet(Interfaces.SITIO_4, tabla, columnas, null, null);
-//            DataTable fragDatosSitio7 = QueryManager.uniGet(Interfaces.SITIO_7, tabla, columnas, null, null);
-//
-//            DataTable dt = DataTable.combinarFragH(fragDatosSitio1,fragDatosSitio4, fragDatosSitio7 );
-//            
-//            System.out.println(dt.toString());
-//            
-//        } catch (RemoteException | NotBoundException ex) {
-//            Logger.getLogger(QueryManager.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    //}
+    public static Integer getMaxId(Interfaces interfaceSitio, String tabla,
+            String columnaID) {
+        DataTable tablaID;
+        Integer ok;
+        try {
+            if (interfaceSitio == Interfaces.LOCALHOST) {
+                tablaID = new BaseDAO().get(tabla, new String[]{"MAX(" + columnaID + ")"},
+                        new String[]{"id"}, null);
+            } else {
+                tablaID = InterfaceManager.getInterface(InterfaceManager.getInterfaceServicio(interfaceSitio))
+                        .get(tabla, new String[]{"MAX(" + columnaID + ")"}, new String[]{"id"}, null);
+            }
+            tablaID.next();
+            ok = tablaID.getInt("id");
+        } catch (RemoteException | NotBoundException | NullPointerException ex) {
+            Logger.getLogger(QueryManager.class.getName()).log(Level.SEVERE, null, ex);
+            ok = -1;
+        }
+        return ok;
+
+    }
 
 }
