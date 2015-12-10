@@ -10,9 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -28,7 +26,6 @@ public class BaseDAO {
     public DataTable add(String tableName, DataTable data, boolean savePKs) {
         PreparedStatement ps = null;
         Connection conexion;
-        boolean ok = true;
         String insertQuery = "INSERT INTO " + tableName + "( ";
         String valuesSection = "VALUES ( ";
 
@@ -107,6 +104,7 @@ public class BaseDAO {
             }
 
             System.out.println("Id 1: " + data.getValueAt(0, 0));
+
             //ConnectionManager.commit();
         } catch (SQLException ex) {
             ConnectionManager.rollback();
@@ -284,7 +282,7 @@ public class BaseDAO {
     }
 
     public DataTable get(String tableName, String[] projectColumns,
-            String[] projectAliases, Map<String, ?> attrWhere) {
+            String[] projectAliases, Map<String, ?> attrWhere, String orderColumn) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         Connection conexion;
@@ -292,7 +290,7 @@ public class BaseDAO {
         String selectQuery = "SELECT ";
 
         try {
-        //Crear query
+            //Crear query
             //Project columns...
             if (projectColumns != null && projectColumns.length > 0
                     && projectAliases != null && projectAliases.length == projectColumns.length) {
@@ -325,29 +323,74 @@ public class BaseDAO {
                 List<String> attrs = new ArrayList<>(attrWhere.keySet());
 
                 for (int i = 0; i < attrs.size() - 1; i++) {
-                    String key = attrs.get(i).toLowerCase();
+                    String key = attrs.get(i);
+                    String[] divide = key.split(" ");
+                    String column = divide[0];
+                    String operator;
 
-                    selectQuery += key + " ";
-
-                    if (!key.contains("=") && !key.contains("<")
-                            && !key.contains(">") && !key.endsWith("like")) {
-                        selectQuery += "= ";
+                    if (divide.length > 1) {
+                        operator = divide[1].toUpperCase();
+                    } else {
+                        operator = "";
                     }
 
-                    selectQuery += "? AND ";
+                    selectQuery += column + " ";
+
+                    if (operator.isEmpty()) {
+                        selectQuery += "= ";
+                    } else {
+                        selectQuery += operator + " ";
+                    }
+
+                    //Llamar a otro metodo si contiene IN
+                    if (operator.equals("IN")) {
+                        Object values = attrWhere.get(key);
+                        if (values == null || !(values instanceof DataTable)
+                                || ((DataTable) values).isEmpty()) {
+                            return null;
+                        }
+
+                        selectQuery += getIn((DataTable) values);
+                    } else {
+                        selectQuery += "?";
+                    }
+
+                    selectQuery += " AND ";
                 }
                 //Last one
-                String key = attrs.get(attrs.size() - 1).toLowerCase();
+                String key = attrs.get(attrs.size() - 1);
+                String[] divide = key.split(" ");
+                String column = divide[0];
+                String operator;
 
-                selectQuery += key + " ";
-
-                if (!key.contains("=") && !key.contains("<")
-                        && !key.contains(">") && !key.endsWith("like")) {
-                    selectQuery += "= ";
+                if (divide.length > 1) {
+                    operator = divide[1].toUpperCase();
+                } else {
+                    operator = "";
                 }
 
-                selectQuery += "?";
+                selectQuery += column + " ";
+
+                if (operator.isEmpty()) {
+                    selectQuery += "= ";
+                } else {
+                    selectQuery += operator + " ";
+                }
+
+                //Llamar a otro metodo si contiene IN
+                if (operator.equals("IN")) {
+                    Object values = attrWhere.get(key);
+                    if (values == null || !(values instanceof DataTable)
+                            || ((DataTable) values).isEmpty()) {
+                        return null;
+                    }
+                    selectQuery += getIn((DataTable)values);
+                } else {
+                    selectQuery += "?";
+                }
             }
+
+            selectQuery += " ORDER BY " + orderColumn;
 
             System.out.println(selectQuery);
 
@@ -360,7 +403,9 @@ public class BaseDAO {
                 int paramNumber = 0;
 
                 for (String key : attrWhere.keySet()) {
-                    ps.setObject(paramNumber + 1, attrWhere.get(key));
+                    if (!key.endsWith("IN")) {
+                        ps.setObject(paramNumber + 1, attrWhere.get(key));
+                    }
                     paramNumber++;
                 }
             }
@@ -381,5 +426,29 @@ public class BaseDAO {
             //ConnectionManager.cerrarTodo(ps, null);
         }
         return dt;
+    }
+
+    private String getIn(DataTable values) {
+        String query = "( ";
+
+        //Poner toda la informacion
+        for (int i = 0; i < values.getRowCount() - 1; i++) {
+            if (values.getColumnClass(0) == String.class) {
+                query += "'" + values.getValueAt(i, 0) + "', ";
+            } else {
+                query += values.getValueAt(i, 0) + ", ";
+            }
+        }
+
+        int last = values.getRowCount() - 1;
+        if (values.getColumnClass(0) == String.class) {
+            query += "'" + values.getValueAt(last, 0) + "'";
+        } else {
+            query += values.getValueAt(last, 0);
+        }
+
+        query += " )";
+
+        return query;
     }
 }

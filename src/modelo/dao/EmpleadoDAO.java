@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelo.dto.DataTable;
@@ -18,7 +19,7 @@ import modelo.dto.DataTable;
  *
  * @author jdosornio
  */
-public class EmpleadoDAO {
+public class EmpleadoDAO extends BaseDAO {
     //Tabla entidad
     private static final String EMPLEADO = "empleado";
     
@@ -45,32 +46,10 @@ public class EmpleadoDAO {
     
     
     public DataTable get(String numeroEmp) {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        DataTable result = null;
-        Connection conexion;
-
-        try {
-            conexion = ConnectionManager.conectar();
-            
-            ps = conexion.prepareStatement(GET_EMPLEADO);
-            ps.setString(1, numeroEmp);
-
-            rs = ps.executeQuery();
-
-            result = new DataTable();
-
-            result.populate(rs);
-
-            //ConnectionManager.commit();
-        } catch (SQLException ex) {
-            ConnectionManager.rollback();
-            Logger.getLogger(EmpleadoDAO.class.getName()).log(Level.SEVERE, null, ex);
-            
-        } finally {
-            ConnectionManager.cerrarTodo(ps, rs);
-        }
-        return result;
+        HashMap<String, String> condicion = new HashMap<>();
+        condicion.put(NUMERO, numeroEmp);
+        
+        return get(EMPLEADO, null, null, condicion, NUMERO);
     }
     
     public DataTable getByImplementacion(int idImplementacion) {
@@ -93,7 +72,7 @@ public class EmpleadoDAO {
 
             //ConnectionManager.commit();
         } catch (SQLException ex) {
-            ConnectionManager.rollback();
+            result = null;
             Logger.getLogger(EmpleadoDAO.class.getName()).log(Level.SEVERE, null, ex);
             
         } finally {
@@ -101,16 +80,4 @@ public class EmpleadoDAO {
         }
         return result;
     }
-    
-//    public static void main(String[] args) {
-//        DataTable res = new EmpleadoDAO().getByImplementacion(3);
-//        
-//        System.out.println(Arrays.toString(res.getTableNames()));
-//        
-//        while(res.next()) {
-//            for (int i = 0; i < res.getColumnCount(); i++) {
-//                System.out.println(res.getColumnName(i) + ": " + res.getObject(res.getColumnName(i)));
-//            }
-//        }
-//    }
 }

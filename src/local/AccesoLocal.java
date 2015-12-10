@@ -21,8 +21,9 @@ import remote.util.InterfaceManager;
  */
 public class AccesoLocal extends UnicastRemoteObject implements Sitio6Int {
 
+    
     public AccesoLocal() throws RemoteException {
-
+        
     }
 
     @Override
@@ -60,13 +61,18 @@ public class AccesoLocal extends UnicastRemoteObject implements Sitio6Int {
         return ok;
     }
 
+    @Override
+    public DataTable get(String tabla, String[] columnas, String[] aliases, Map<String, ?> attrWhere,
+            String columnName) throws RemoteException {
+        return new BaseDAO().get(tabla, columnas, aliases, attrWhere, columnName);
+    }
 
     @Override
     public boolean commit() throws RemoteException {
         System.out.println("Commit!");
         boolean ok = ConnectionManager.commit();
         ConnectionManager.cerrar();
-
+        
         return ok;
     }
 
@@ -75,7 +81,7 @@ public class AccesoLocal extends UnicastRemoteObject implements Sitio6Int {
         System.out.println("Rollback!");
         boolean ok = ConnectionManager.rollback();
         ConnectionManager.cerrar();
-
+        
         return ok;
     }
 
@@ -90,16 +96,6 @@ public class AccesoLocal extends UnicastRemoteObject implements Sitio6Int {
     }
 
     @Override
-    public DataTable getImplementacionesByPlantel(int idPlantel) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public DataTable get(String tabla, String[] columnas, String[] aliases, Map<String, ?> attrWhere) throws RemoteException {
-        return new BaseDAO().get(tabla, columnas, aliases, attrWhere);
-    }
-    
-    @Override
     public void setConexionesSitos(Map<InterfaceManager.Interfaces, Object[]> conexiones)
             throws RemoteException {
         
@@ -108,5 +104,10 @@ public class AccesoLocal extends UnicastRemoteObject implements Sitio6Int {
         
         System.out.println("Se obtuvieron " + InterfaceManager
                 .getInterfacesConexion().size() + " interfaces");
+    }
+
+    @Override
+    public DataTable getImplementacionesByPlantel(int idPlantel) throws RemoteException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
